@@ -14,6 +14,7 @@ const SingleProductPage = () => {
   const id = params.id;
   const product = useSelector((state) => state.product.product);
   const [quantity, setQuantity] = useState(1);
+  console.log(id);
   useEffect(() => {
     dispatch(getproduct(id));
   }, []);
@@ -21,7 +22,7 @@ const SingleProductPage = () => {
     dispatch(addProductToCart({ ...product, quantity }));
     history.push(`/cart/${id}?qty=${quantity}`);
   };
-
+  console.log(product, "PRODUCT");
   return (
     <div className="container  ">
       <div className="row mt-5 mb-5">
@@ -31,7 +32,9 @@ const SingleProductPage = () => {
         <div className="col-md">
           <div className="p-5 text-center bg-light">
             <h1 className="mb-3">{product.name}</h1>
+            {console.log(product)}
             <Rating rating={product.rating} />
+            <p>{product.numReviews} reviews</p>
             <p>{product.description}</p>
           </div>
         </div>

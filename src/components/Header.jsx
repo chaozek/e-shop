@@ -1,8 +1,17 @@
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { logout } from "../redux/userSlice";
+import { removeAllProducts } from "../redux/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
 import React from "react";
 const Header = () => {
   const cart = useSelector((state) => state.cart.cartItems);
+  const user = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(removeAllProducts());
+  };
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       {/* Container wrapper */}
@@ -54,50 +63,59 @@ const Header = () => {
         {/* Right elements */}
         <div className="d-flex align-items-center">
           {/* Icon */}
-          <a className="text-reset me-3" href="#">
+          <Link className="text-reset me-3" to="/cart">
             <i className="fas fa-shopping-cart" />
             <span className="badge rounded-pill badge-notification bg-danger">
               {cart?.length > 0 ? cart?.length : ""}
             </span>
-          </a>
+          </Link>
           {/* Notifications */}
           {/* Avatar */}
-          <a
-            className="dropdown-toggle d-flex align-items-center hidden-arrow"
-            href="#"
-            id="navbarDropdownMenuLink"
-            role="button"
-            data-mdb-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <img
-              src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-              className="rounded-circle"
-              height={25}
-              alt="Black and White Portrait of a Man"
-              loading="lazy"
-            />
-          </a>
-          <ul
-            className="dropdown-menu dropdown-menu-end"
-            aria-labelledby="navbarDropdownMenuLink"
-          >
-            <li>
-              <a className="dropdown-item" href="#">
-                My profile
+          {user.email ? (
+            <>
+              {" "}
+              <a
+                className="dropdown-toggle d-flex align-items-center hidden-arrow"
+                href="#"
+                id="navbarDropdownMenuLink"
+                role="button"
+                data-mdb-toggle="dropdown"
+                aria-expanded="false"
+              >
+                <img
+                  src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+                  className="rounded-circle"
+                  height={25}
+                  alt="Black and White Portrait of a Man"
+                  loading="lazy"
+                />
               </a>
-            </li>
-            <li>
-              <a className="dropdown-item" href="#">
-                Settings
-              </a>
-            </li>
-            <li>
-              <a className="dropdown-item" href="#">
-                Logout
-              </a>
-            </li>
-          </ul>
+              <ul
+                className="dropdown-menu dropdown-menu-end"
+                aria-labelledby="navbarDropdownMenuLink"
+              >
+                <li>
+                  <a className="dropdown-item" href="#">
+                    My profile
+                  </a>
+                </li>
+                <li>
+                  <a className="dropdown-item" href="#">
+                    Settings
+                  </a>
+                </li>
+                <li>
+                  <a className="dropdown-item" onClick={(e) => handleLogout(e)}>
+                    Logout
+                  </a>
+                </li>
+              </ul>
+            </>
+          ) : (
+            <Link className="nav-link" style={{ color: "gray" }} to="/signin">
+              Login
+            </Link>
+          )}
         </div>
         {/* Right elements */}
       </div>

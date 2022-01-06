@@ -17,6 +17,7 @@ module.exports = {
     },
   },
   rules: {
+    "react/prop-types": 0,
     semi: "off",
     // '@typescript-eslint/semi': ['error', 'never'],
     // '@typescript-eslint/no-use-before-define': [
@@ -44,7 +45,6 @@ module.exports = {
     "max-len": "off",
     "new-parens": "error",
     "no-bitwise": "error",
-    "no-console": ["warn", { allow: ["warn", "info", "error"] }],
     "no-caller": "error",
     "no-multiple-empty-lines": ["error", { max: 2, maxEOF: 1, maxBOF: 0 }],
     "quote-props": ["error", "as-needed"],

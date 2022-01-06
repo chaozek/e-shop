@@ -1,7 +1,7 @@
-import { addProductToCart } from "../redux/cartSlice";
+import { Link, useParams } from "react-router-dom";
+import { addProductToCart, removeProductFromCart } from "../redux/cartSlice";
 import { getproduct } from "../redux/productSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 
 /* eslint-disable react/prop-types */
@@ -10,17 +10,37 @@ const Cart = (props) => {
   const params = useParams();
   const id = params.id;
   const cartList = useSelector((state) => state.cart.cartItems);
+  const userSignin = useSelector((state) => state.user.user);
+  let loggedInOrLoggedOut = Object.keys(userSignin).length;
+
   const [qty, setQty] = useState(1);
 
+  let sum = 0;
   const quantity = props.location.search.split("=")[1];
-  useEffect(() => {}, []);
   const handleChangeQty = (props) => {
     const item = props[0];
     const quantity = Number(props[1]);
     dispatch(addProductToCart({ ...item, quantity }));
   };
+  cartList.map((item) => (sum += item.price * item.quantity));
+  console.log(cartList);
+
+  if (cartList.length === 0) {
+    return (
+      <div style={{ minHeight: "50vh" }}>
+        <div className="alert alert-primary mt-3" role="alert">
+          You Cart Is Empty, <Link to="/">Go Shoping</Link>
+        </div>
+      </div>
+    );
+  }
+
+  const checkoutHandler = () => {
+    props.history.push("/signin?redirect=shipping");
+  };
+
   return (
-    <div className="row m-5">
+    <div className="row m-5" style={{ minHeight: "50vh" }}>
       <div className="col-md-8">
         {cartList.map((cartItem, i) => (
           <div
@@ -52,6 +72,7 @@ const Cart = (props) => {
               type="button"
               className="btn btn-outline-danger btn-rounded"
               data-mdb-ripple-color="dark"
+              onClick={() => dispatch(removeProductFromCart(cartItem))}
             >
               Delete
             </button>
@@ -62,20 +83,19 @@ const Cart = (props) => {
         {" "}
         <div className="card ">
           <div className="card-header">CART</div>
-          <div className="card-body">
+          <div className="card-body text-center">
             <div className="card-header d-flex justify-content-between p-0">
-              <h5>SUBTOTAL ()</h5>
-              <p>XXX</p>
+              <h5>SUBTOTAL ({cartList.length})</h5>
+              <p>${sum}</p>
             </div>
-            <p className="card-text">
-              With supporting text below as a natural lead-in to additional
-              content.
-            </p>
-            <a href="#" className="btn btn-primary">
-              Go somewhere
+
+            <a
+              className="btn btn-primary mt-4 "
+              onClick={() => checkoutHandler()}
+            >
+              Proceed to Checkout
             </a>
           </div>
-          <div className="card-footer text-muted">2 days ago</div>
         </div>
       </div>
     </div>

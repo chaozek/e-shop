@@ -15,7 +15,7 @@ export const tablet = (props) => {
 };
 export const mobile = (props) => {
   return css`
-    @media only screen and (max-width: 550px) {
+    @media only screen and (max-width: 576px) {
       ${props}
     } ;
   `;
