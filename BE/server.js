@@ -1,4 +1,5 @@
 import asyncHandler from "express-async-handler";
+import bodyParser from "body-parser";
 import cors from "cors";
 import data from "./data.js";
 import dotenv from "dotenv";
@@ -18,8 +19,8 @@ mongoose.connect(
 );
 dotenv.config();
 const app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.get("/", (req, res) => {
   res.send("SERVER READY");
@@ -29,6 +30,9 @@ app.use("/products", productRouter);
 app.use("/orders", orderRouter);
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
+});
+app.get("/config/paypal", (req, res) => {
+  res.send(process.env.PAYPAL_CLIENT_ID || "sb");
 });
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log("listening"));

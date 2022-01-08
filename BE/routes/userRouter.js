@@ -1,4 +1,4 @@
-import { generateToken } from "../utils.js";
+import { generateToken, isAuth } from "../utils.js";
 import User from "../models/userModel.js";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcrypt";
@@ -7,16 +7,19 @@ import express from "express";
 const userRouter = express.Router();
 
 userRouter.get(
-  "/seed",
+  "/:id",
   asyncHandler(async (req, res) => {
-    await User.insertMany(data.users);
-    res.send(data.users);
+    const user = await User.findById(req.params.id);
+    if (user) {
+      res.send(user);
+    } else {
+      res.status(404).send({ message: "user not found" });
+    }
   })
 );
 userRouter.post(
   "/signin",
   asyncHandler(async (req, res) => {
-    console.log(req.body);
     const user = await User.findOne({ email: req.body.email });
 
     if (user) {
@@ -37,7 +40,6 @@ userRouter.post(
 userRouter.post(
   "/signup",
   asyncHandler(async (req, res) => {
-    console.log(req.body);
     const user = await User.findOne({ email: req.body.email });
 
     if (user) {
@@ -61,6 +63,54 @@ userRouter.post(
       isAdmin: newUser.isAdmin,
       token: generateToken(newUser),
     });
+  })
+);
+userRouter.put(
+  "/edit",
+  isAuth,
+  asyncHandler(async (req, res) => {
+    console.log(req.body.formValues, "BODY");
+    const user = await User.findById(req.body.userId);
+    if (user) {
+      if (req.body.formValues.name.length > 0) {
+        user.name = req.body.formValues.name;
+      }
+      if (req.body.formValues.email.length > 0) {
+        user.email = req.body.formValues.email;
+      }
+
+      if (
+        req.body.formValues.password.length > 0 &&
+        req.body.formValues.password1.length > 0
+      ) {
+        console.log(
+          req.body.formValues.password,
+          req.body.formValues.password1
+        );
+        if (req.body.formValues.password === req.body.formValues.password1) {
+          console.log("MENIM HESLO");
+          user.password = bcrypt.hashSync(req.body.formValues.password, 8);
+        } else {
+          res.status(400).send({ message: "Passwords doesnt match" });
+          return;
+        }
+        res.status(400).send({ message: "server error" });
+      }
+
+      const updatedUser = await user.save();
+      res.send({
+        message: "User updated",
+        user: {
+          _id: updatedUser._id,
+          name: updatedUser.name,
+          email: updatedUser.email,
+          isAdmin: updatedUser.isAdmin,
+          token: generateToken(updatedUser),
+        },
+      });
+    } else {
+      res.status(404).send({ message: "User Not Found" });
+    }
   })
 );
 export default userRouter;

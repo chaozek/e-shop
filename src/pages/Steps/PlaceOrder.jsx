@@ -1,19 +1,48 @@
-import { useSelector } from "react-redux";
-import React from "react";
+import { createOrder } from "../../redux/orderSlice";
+import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect } from "react";
 import Steps from "../../components/Steps";
 
 const PlaceOrder = (props) => {
   const page = props.history.location.pathname.split("/")[1];
   const shipping = useSelector((state) => state.cart.shippingAddress);
   const cartList = useSelector((state) => state.cart.cartItems);
+  const orderStatus = useSelector((state) => state.order.status);
+  const order = useSelector((state) => state?.order?.order?.createdOrder?._id);
+  const cart = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
   const payment = useSelector((state) => state.cart.paymentMethod);
-  console.log(cartList);
-  console.log(page, "Page");
+  const ship = useSelector((state) => state.cart);
+  const pay = useSelector((state) => state.cart.paymentMethod);
   const cartPrice = cartList.reduce((a, c) => a + c.quantity * c.price, 0);
   const taxes = Math.round(cartPrice * 0.21);
+  const totalPrice = cartPrice + taxes + (cartPrice < 100 ? 10 : 0);
   const handleClick = () => {
-    "F";
+    dispatch(
+      createOrder({
+        shippingAddress: { ...shipping },
+        itemsPrice: cartPrice,
+        taxPrice: taxes,
+        totalPrice: totalPrice,
+        shippingPrice: cartPrice < 100 ? 10 : 0,
+        paymentMethod: cart.paymentMethod,
+        orderItems: cart.cartItems,
+      })
+    );
   };
+  console.log(cart.shippingAddress.address);
+  useEffect(() => {
+    if (!pay || !cart.shippingAddress.address) {
+      console.log("F");
+      props.history.push("/payment");
+    }
+  }, []);
+  useEffect(() => {
+    if (orderStatus === "success") {
+      props.history.push("order/" + order);
+    }
+  }, [orderStatus]);
+  console.log(JSON.parse(localStorage.getItem("userInfo")).token);
   return (
     <div className="mt-5">
       <Steps page={page} />
@@ -54,7 +83,6 @@ const PlaceOrder = (props) => {
                     style={{ width: "80px" }}
                   />
                   <p>{cartItem.name}</p>
-
                   <p>
                     <strong> {cartItem.quantity}x</strong> ${cartItem.price}
                   </p>

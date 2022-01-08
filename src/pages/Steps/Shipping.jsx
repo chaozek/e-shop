@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { addShippingAddress } from "../../redux/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import React, { useEffect, useState } from "react";
@@ -8,8 +9,9 @@ const Shipping = (props) => {
   const dispatch = useDispatch();
   const userSignin = useSelector((state) => state.user.user);
   const cart = useSelector((state) => state.cart.shippingAddress);
+  const cartItems = useSelector((state) => state.cart.cartItems.length);
   let loggedInOrLoggedOut = Object.keys(userSignin).length;
-  console.log(page);
+  console.log(cartItems);
   const [formValues, setFormValues] = useState({
     firstName: cart.firstName,
     lastName: cart.lastName,
@@ -38,6 +40,7 @@ const Shipping = (props) => {
       props.history.push("/");
     }
   }, [userSignin]);
+
   return (
     <div className="mt-5">
       <Steps page={page} />
@@ -45,89 +48,97 @@ const Shipping = (props) => {
         className=" d-flex align-items-center justify-content-center "
         style={{ height: "100%" }}
       >
-        <form className=" md-w-50  shippingForm">
-          <div className="input-group">
-            <input
-              type="text"
-              className="form-control "
-              placeholder="Enter Firstname"
-              style={{ marginRight: "5px", marginBottom: "5px" }}
-              name="firstName"
-              value={formValues.firstName}
-              onChange={(e) => handleChange(e)}
-            />
+        {cartItems === 0 ? (
+          <div style={{ minHeight: "50vh" }}>
+            <div className="alert alert-primary mt-3" role="alert">
+              You Cart Is Empty, <Link to="/">Go Shoping</Link>
+            </div>
+          </div>
+        ) : (
+          <form className=" md-w-50  shippingForm">
+            <div className="input-group">
+              <input
+                type="text"
+                className="form-control "
+                placeholder="Enter Firstname"
+                style={{ marginRight: "5px", marginBottom: "5px" }}
+                name="firstName"
+                value={formValues.firstName}
+                onChange={(e) => handleChange(e)}
+              />
 
-            <input
-              type="text"
-              className="form-control "
-              placeholder="Enter Surname"
-              style={{ marginBottom: "5px" }}
-              value={formValues.lastName}
-              name="lastName"
-              onChange={(e) => handleChange(e)}
-            />
-          </div>
-          <div className="input-group">
-            <input
-              type="text"
-              className="form-control "
-              placeholder="Enter City"
-              style={{ marginRight: "5px", marginBottom: "5px" }}
-              value={formValues.city}
-              name="city"
-              onChange={(e) => handleChange(e)}
-            />
+              <input
+                type="text"
+                className="form-control "
+                placeholder="Enter Surname"
+                style={{ marginBottom: "5px" }}
+                value={formValues.lastName}
+                name="lastName"
+                onChange={(e) => handleChange(e)}
+              />
+            </div>
+            <div className="input-group">
+              <input
+                type="text"
+                className="form-control "
+                placeholder="Enter City"
+                style={{ marginRight: "5px", marginBottom: "5px" }}
+                value={formValues.city}
+                name="city"
+                onChange={(e) => handleChange(e)}
+              />
 
-            <input
-              type="number"
-              className="form-control "
-              placeholder="Enter Phone"
-              style={{ marginBottom: "5px" }}
-              value={formValues.phone}
-              name="phone"
-              onChange={(e) => handleChange(e)}
-            />
-          </div>
-          <div className="input-group">
-            <input
-              type="text"
-              className="form-control "
-              placeholder="Enter Postal Code"
-              style={{ marginRight: "5px", marginBottom: "5px" }}
-              value={formValues.postal}
-              name="postal"
-              onChange={(e) => handleChange(e)}
-            />
+              <input
+                type="number"
+                className="form-control "
+                placeholder="Enter Phone"
+                style={{ marginBottom: "5px" }}
+                value={formValues.phone}
+                name="phone"
+                onChange={(e) => handleChange(e)}
+              />
+            </div>
+            <div className="input-group">
+              <input
+                type="text"
+                className="form-control "
+                placeholder="Enter Postal Code"
+                style={{ marginRight: "5px", marginBottom: "5px" }}
+                value={formValues.postal}
+                name="postal"
+                onChange={(e) => handleChange(e)}
+              />
 
-            <input
-              type="text"
-              className="form-control "
-              placeholder="Enter Address"
-              style={{ marginBottom: "5px" }}
-              value={formValues.address}
-              name="address"
-              onChange={(e) => handleChange(e)}
-            />
-          </div>
-          <div className="form-group">
-            <textarea
-              className="form-control"
-              placeholder="Enter More Info"
-              id="exampleFormControlTextarea1"
-              value={formValues.info}
-              name="info"
-              rows="3"
-              onChange={(e) => handleChange(e)}
-            ></textarea>
-          </div>
-          <button
-            type="submit"
-            className="btn btn-primary mt-3"
-            onClick={(e) => handleClick(e)}
-          >
-            Submit
-          </button>
-        </form>
+              <input
+                type="text"
+                className="form-control "
+                placeholder="Enter Address"
+                style={{ marginBottom: "5px" }}
+                value={formValues.address}
+                name="address"
+                onChange={(e) => handleChange(e)}
+              />
+            </div>
+            <div className="form-group">
+              <textarea
+                className="form-control"
+                placeholder="Enter More Info"
+                id="exampleFormControlTextarea1"
+                value={formValues.info}
+                name="info"
+                rows="3"
+                onChange={(e) => handleChange(e)}
+              ></textarea>
+            </div>
+            <button
+              type="submit"
+              className="btn btn-primary mt-3"
+              onClick={(e) => handleClick(e)}
+            >
+              Submit
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );

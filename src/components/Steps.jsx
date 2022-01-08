@@ -18,7 +18,7 @@ const Steps = ({ page }) => {
         <Step
           to="/shipping"
           active={
-            (page === "shipping" && true) ||
+            (page === "shipping" ? "true" : undefined) ||
             page === "payment" ||
             page === "placeorder"
           }
@@ -28,13 +28,15 @@ const Steps = ({ page }) => {
         <Step
           to="/payment"
           data-mdb-toggle="tooltip"
-          active={(page === "payment" && true) || page === "placeorder"}
+          active={
+            (page === "payment" ? "true" : undefined) || page === "placeorder"
+          }
           data-mdb-placement="right"
           title="Tooltip on right"
         >
           3. Payment
         </Step>
-        <Step active={page === "placeorder" && true} to="/placeorder">
+        <Step active={page === "placeorder" && "true"} to="/placeorder">
           4. Place Order
         </Step>
       </Stepper>

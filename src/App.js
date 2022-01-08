@@ -5,8 +5,11 @@ import Cart from "./pages/Cart";
 import Footer from "./components/Footer";
 import Header from "./components/Header";
 import Homepage from "./pages/Homepage";
+import OrderConfirm from "./pages/OrderConfirm";
+import OrderHistory from "./pages/OrderHistory";
 import Payment from "./pages/Steps/Payment";
 import PlaceOrder from "./pages/Steps/PlaceOrder";
+import Profile from "./pages/Profile";
 import Shipping from "./pages/Steps/Shipping";
 import Signin from "./pages/Signin";
 import SingleProductPage from "./pages/SingleProductPage";
@@ -24,8 +27,11 @@ export default function App() {
           <Route exact path="/signin" component={Signin} />
           <Route exact path="/shipping" component={Shipping} />
           <Route exact path="/payment" component={Payment} />
+          <Route exact path="/orderhistory" component={OrderHistory} />
+          <Route exact path="/profile" component={Profile} />
           <Route exact path="/placeorder" component={PlaceOrder} />
           <Route exact path="/signup" component={signup} />
+          <Route exact path="/order/:id" component={OrderConfirm} />
           <Route exact path="/product/:id" component={SingleProductPage} />
         </Container>
       </Router>

@@ -15,6 +15,19 @@ export const getUser = createAsyncThunk(
     }
   }
 );
+export const fetchUserInfo = createAsyncThunk(
+  "user/fetchUserInfo",
+  async (id, { rejectWithValue }) => {
+    try {
+      console.log(id, "ID");
+      const user = await axios.get(`http://localhost:5000/users/${id}`);
+      return user.data;
+    } catch (error) {
+      console.log(error.response.data.message);
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
 export const signupUser = createAsyncThunk(
   "user/signupUser",
   async (user, { rejectWithValue }) => {
@@ -31,6 +44,30 @@ export const signupUser = createAsyncThunk(
     }
   }
 );
+export const editUser = createAsyncThunk(
+  "user/editUser",
+  async (newData, { rejectWithValue }) => {
+    console.log(newData, "NEW");
+    const userSignin = JSON.parse(localStorage.getItem("userInfo")).token;
+
+    try {
+      const fetchedUser = await axios.put(
+        `http://localhost:5000/users/edit`,
+        newData,
+        {
+          headers: {
+            authorization: `Bearer ${userSignin}`,
+          },
+        }
+      );
+      console.log("FETCH", fetchedUser);
+      return fetchedUser.data.user;
+    } catch (error) {
+      console.log(error);
+      return rejectWithValue(error.response.data.message);
+    }
+  }
+);
 const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -38,6 +75,7 @@ const userSlice = createSlice({
       localStorage.getItem("userInfo") !== null
         ? JSON.parse(localStorage.getItem("userInfo"))
         : {},
+    userInfo: {},
     status: null,
     error: null,
   },
@@ -72,6 +110,31 @@ const userSlice = createSlice({
       state.status = "success";
     },
     [signupUser.rejected]: (state, action) => {
+      console.log(action.payload, "ERORR");
+      state.error = action.payload;
+      state.status = "failed";
+    },
+    [fetchUserInfo.pending]: (state) => {
+      state.status = "loading";
+    },
+    [fetchUserInfo.fulfilled]: (state, action) => {
+      state.userInfo = action.payload;
+      state.status = "success";
+    },
+    [fetchUserInfo.rejected]: (state, action) => {
+      console.log(action.payload, "ERORR");
+      state.error = action.payload;
+      state.status = "failed";
+    },
+    [editUser.pending]: (state) => {
+      state.status = "loading";
+    },
+    [editUser.fulfilled]: (state, action) => {
+      state.user = action.payload;
+      localStorage.setItem("userInfo", JSON.stringify(action.payload));
+      state.status = "success";
+    },
+    [editUser.rejected]: (state, action) => {
       console.log(action.payload, "ERORR");
       state.error = action.payload;
       state.status = "failed";

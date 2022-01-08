@@ -31,13 +31,10 @@ const Header = () => {
         {/* Collapsible wrapper */}
         <div className="collapse navbar-collapse" id="navbarSupportedContent">
           {/* Navbar brand */}
-          <Link className="navbar-brand mt-2 mt-lg-0" to="/">
-            <img
-              src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp"
-              height={15}
-              alt="MDB Logo"
-              loading="lazy"
-            />
+          <Link className="navbar-brand mt-2 mt-lg-0 " to="/">
+            <h5 className="d-flex justify-content-center align-items-center m-0">
+              e-shop
+            </h5>
           </Link>
           {/* Left links */}
           <ul className="navbar-nav me-auto mb-2 mb-lg-0">
@@ -95,15 +92,16 @@ const Header = () => {
                 aria-labelledby="navbarDropdownMenuLink"
               >
                 <li>
-                  <a className="dropdown-item" href="#">
-                    My profile
-                  </a>
+                  <Link to="/profile" className="dropdown-item">
+                    Profile
+                  </Link>
                 </li>
                 <li>
-                  <a className="dropdown-item" href="#">
-                    Settings
-                  </a>
+                  <Link to="/orderhistory" className="dropdown-item">
+                    Orders
+                  </Link>
                 </li>
+
                 <li>
                   <a className="dropdown-item" onClick={(e) => handleLogout(e)}>
                     Logout

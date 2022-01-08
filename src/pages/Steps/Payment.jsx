@@ -8,6 +8,8 @@ import Steps from "../../components/Steps";
 const Payment = (props) => {
   const page = props.history.location.pathname.split("/")[1];
   const cart = useSelector((state) => state.cart.shippingAddress);
+  const ship = useSelector((state) => state.cart);
+
   const dispatch = useDispatch();
   const [payment, setPayment] = useState("paypal");
   console.log(cart.address);
