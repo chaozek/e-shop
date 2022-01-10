@@ -33,7 +33,6 @@ const PlaceOrder = (props) => {
   console.log(cart.shippingAddress.address);
   useEffect(() => {
     if (!pay || !cart.shippingAddress.address) {
-      console.log("F");
       props.history.push("/payment");
     }
   }, []);

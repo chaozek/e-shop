@@ -36,7 +36,6 @@ export const signupUser = createAsyncThunk(
         `http://localhost:5000/users/signup`,
         user
       );
-      console.log("FETCH", fetchedUser);
       return fetchedUser.data;
     } catch (error) {
       console.log(error.response.data.message);
@@ -60,7 +59,6 @@ export const editUser = createAsyncThunk(
           },
         }
       );
-      console.log("FETCH", fetchedUser);
       return fetchedUser.data.user;
     } catch (error) {
       console.log(error);

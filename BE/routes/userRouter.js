@@ -88,7 +88,6 @@ userRouter.put(
           req.body.formValues.password1
         );
         if (req.body.formValues.password === req.body.formValues.password1) {
-          console.log("MENIM HESLO");
           user.password = bcrypt.hashSync(req.body.formValues.password, 8);
         } else {
           res.status(400).send({ message: "Passwords doesnt match" });

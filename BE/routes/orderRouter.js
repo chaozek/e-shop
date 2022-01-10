@@ -1,4 +1,4 @@
-import { isAuth } from "../utils.js";
+import { isAdmin, isAuth } from "../utils.js";
 import Order from "../models/orderModel.js";
 import Product from "../models/productModel.js";
 import asyncHandler from "express-async-handler";

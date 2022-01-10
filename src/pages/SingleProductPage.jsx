@@ -14,20 +14,33 @@ const SingleProductPage = () => {
   const id = params.id;
   const product = useSelector((state) => state.product.product);
   const [quantity, setQuantity] = useState(1);
+  const [finalImage, setFinalImage] = useState("");
   console.log(id);
   useEffect(() => {
     dispatch(getproduct(id));
+
+    return () => {
+      setFinalImage("");
+    };
   }, []);
+  useEffect(() => {
+    if (product?.image?.includes("\\")) {
+      setFinalImage("/" + "uploads" + "/" + product?.image?.split("\\")[1]);
+    } else {
+      setFinalImage(product?.image);
+    }
+  }, [product]);
   const handleCart = () => {
     dispatch(addProductToCart({ ...product, quantity }));
     history.push(`/cart/${id}?qty=${quantity}`);
   };
-  console.log(product, "PRODUCT");
+  const uploadedImage = "/" + "uploads" + "/" + product?.image?.split("\\")[1];
+  console.log(product?.image?.split("\\")[1], "F");
   return (
     <div className="container  ">
       <div className="row mt-5 mb-5">
         <div className="col-lg ">
-          <img src={product.image} className="img-fluid" alt="Wild Landscape" />
+          <img src={finalImage} className="img-fluid" alt="Wild Landscape" />
         </div>
         <div className="col-md">
           <div className="p-5 text-center bg-light">

@@ -6,7 +6,9 @@ import dotenv from "dotenv";
 import express from "express";
 import mongoose from "mongoose";
 import orderRouter from "./routes/orderRouter.js";
+import path from "path";
 import productRouter from "./routes/productRouter.js";
+import uploadRouter from "./routes/uploadRouter.js";
 import userRouter from "./routes/userRouter.js";
 
 mongoose.connect(
@@ -25,9 +27,13 @@ app.use(cors());
 app.get("/", (req, res) => {
   res.send("SERVER READY");
 });
+app.use("/uploads", uploadRouter);
 app.use("/users", userRouter);
 app.use("/products", productRouter);
 app.use("/orders", orderRouter);
+const __dirname = path.resolve();
+app.use("/uploads", express.static(path.join(__dirname, "/uploads")));
+
 app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });

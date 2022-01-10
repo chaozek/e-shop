@@ -7,7 +7,6 @@ const Header = () => {
   const cart = useSelector((state) => state.cart.cartItems);
   const user = useSelector((state) => state.user.user);
   const dispatch = useDispatch();
-
   const handleLogout = () => {
     dispatch(logout());
     dispatch(removeAllProducts());
@@ -115,8 +114,50 @@ const Header = () => {
             </Link>
           )}
         </div>
+
         {/* Right elements */}
       </div>
+
+      {user.isAdmin && (
+        <div className="d-flex align-items-center">
+          <a
+            className="dropdown-toggle d-flex align-items-center nav-link"
+            href="#"
+            id="navbarDropdownMenuLink"
+            role="button"
+            data-mdb-toggle="dropdown"
+            aria-expanded="false"
+            style={{ color: "gray" }}
+          >
+            admin
+          </a>
+          <ul
+            className="dropdown-menu dropdown-menu-end"
+            aria-labelledby="navbarDropdownMenuLink"
+          >
+            <li>
+              <Link to="/profile" className="dropdown-item">
+                Dashboard
+              </Link>
+            </li>
+            <li>
+              <Link to="/profile" className="dropdown-item">
+                Orders
+              </Link>
+            </li>
+            <li>
+              <Link to="/productslist" className="dropdown-item">
+                Products
+              </Link>
+            </li>
+            <li>
+              <a className="dropdown-item" onClick={(e) => handleLogout(e)}>
+                Users
+              </a>
+            </li>
+          </ul>
+        </div>
+      )}
       {/* Container wrapper */}
     </nav>
   );

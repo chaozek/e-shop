@@ -16,17 +16,27 @@ const ItemList = () => {
       <Row>
         {products?.map((product) => (
           <Col xs={12} md={4} xl={3} className="mt-4" key={product._id}>
-            <Card className=" m-2">
-              <Card.Img variant="top" src={product.image} />
-              <h5 className="card-header mt-3">{product.name}</h5>
-              <Card.Body>
-                <Card.Text>{product.description}</Card.Text>
-                <Card.Title>{product.price} $</Card.Title>
-                <Link to={`product/${product._id}`}>
-                  <Button variant="primary mt-4">Get it now</Button>
-                </Link>
-              </Card.Body>
-            </Card>
+            <div className="card-deck">
+              <div className="card">
+                <img
+                  className="card-img-top"
+                  style={{ height: "300px", width: "100%", objectFit: "cover" }}
+                  src={product.image}
+                  alt="Card image cap"
+                />
+                <div className="card-body">
+                  <h5 className="card-title">{product.name}</h5>
+                  <p className="card-text">{product.description}</p>
+                </div>
+                <Link
+                  to={`product/${product._id}`}
+                  type="submit"
+                  className="btn btn-primary m-3"
+                >
+                  GET IT
+                </Link>{" "}
+              </div>
+            </div>
           </Col>
         ))}
       </Row>
