@@ -41,10 +41,10 @@ app.use((err, req, res, next) => {
 app.get("/config/paypal", (req, res) => {
   res.send(process.env.PAYPAL_CLIENT_ID || "sb");
 });
-app.use(express.static(path.join(__dirname, "./FE/build")));
+app.use(express.static(path.join(__dirname, "/FE/build")));
 
 app.get("*", function (_, res) {
-  res.sendFile(path.join(__dirname, "./FE/build/index.html"), function (err) {
+  res.sendFile(path.join(__dirname, "/FE/build/index.html"), function (err) {
     if (err) {
       res.status(500).send(err);
     }
